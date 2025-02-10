@@ -1,6 +1,7 @@
 CoLES TrxEncoder modification  
-  
+   
 Ноутбуки   
+   
 coles-test-pipeline.ipynb - ноутбук с тестовым пайплайном   
 emb_size_analysis.ipynb - ноутбук с исследованием влияния размера эмбеддинга на качество модели   
 coles_discretizer_analysis.ipynb - ноутбук с исследованием дискретизаторов   
