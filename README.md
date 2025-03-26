@@ -26,4 +26,14 @@ ptls.preprocessing.baseline_discretizer.k_discretizer.py - обертка над
 ptls.preprocessing.baseline_discretizer.single_tree_discretizer.py - дискретизатор SingleTree   
    
 ptls.preprocessing.deeptlf - дискретизатор DeepTLF и связанные классы   
+    
 
+Пайплайн обучения и тестирования
+    
+exp_pipeline.py - скрипт    
+exp_config.yaml - конфиг из тестового ноутбука из репозитория pytorch lifestream    
+exp_config_my_params.yaml - конфиг на котором я проводил эксперименты    
+Makefile - мейкфайл с экспериментами    
+
+Пример эксперимента:    
+    exp_pipeline.py $(CONFIG_PATH) --exp-name=<experiment-name> --ds-name=<age_bins / gender> --mode=<train-test / train / test>

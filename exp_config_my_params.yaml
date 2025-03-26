@@ -1,0 +1,198 @@
+random_state: 42
+models_path: ../coles_models/
+prep_datasets_path: ../coles_prep_datasets/
+raw_data_path: ../data/
+emb_path: ../glove_embeddings/
+report_path: ../coles_experiments/
+
+model:
+    embed_size: 16
+    seq_encoder_type: gru
+    hidden_size: 256
+
+train:
+    max_epochs: 150
+    device: gpu
+    lr: 0.001
+    weight_decay: 0.0
+    data_loader:
+        train:
+            min_seq_len: 25
+            split_count: 5
+            cnt_min: 25
+            cnt_max: 200
+            batch_size: 256
+        val:
+            min_seq_len: 25
+            split_count: 5
+            cnt_min: 25
+            cnt_max: 200
+            batch_size: 256
+        num_workers: 2
+    lr_scheduler:
+        enabled: true
+        step_size: 30
+        gamma: 0.9
+    early_stopping:
+        enabled: true
+        patience: 2
+        min_delta: 0.01
+
+test:
+    recall_top_k:
+        enable: true
+        calc_on_train: false
+        data_loader:
+            min_seq_len: 25
+            split_count: 5
+            cnt_min: 25
+            cnt_max: 200
+            batch_size: 256
+    proxy_metrics:
+        enable: true
+        calc_on_train: false
+        models:
+            lgbm_boosting:
+                n_estimators: 500
+                boosting_type: 'gbdt'
+                subsample: 0.5
+                subsample_freq: 1
+                learning_rate: 0.02
+                feature_fraction: 0.75
+                max_depth: 6
+                lambda_l1: 1
+                lambda_l2: 1
+                min_data_in_leaf: 50 
+                n_jobs: 8
+                verbosity: -1
+            random_forest:
+                basic: true
+        metrics:
+            - accuracy
+        n_trials: 3
+        batch_size: 256
+    num_workers: 0
+    device: gpu
+    report_name: my_conf
+
+datasets:
+    age_bins:
+        target_name: bins
+        test_split_coef: 0.2
+        val_split_coef: 0.1
+
+    gender:
+        target_name: gender
+        test_split_coef: 0.2
+        val_split_coef: 0.1
+
+experiments:
+    baseline_myparams:
+        trx_encoder_type: basic
+        nsep: true
+    quant_100_dist_common_emb_myparams_cat:
+        trx_encoder_type: cat
+        agg_type : cat 
+        disc:
+            type: quantile
+            k_bins: 100
+            fixed_emb: false
+        nemb: false
+    quant_num_emb_dist_common_emb_myparams_cat:
+        trx_encoder_type: cat
+        agg_type : cat 
+        disc:
+            type: quantile
+            k_bins: 30
+            fixed_emb: true
+        nemb: true
+    st_num_emb_dist_common_emb_myparams_sum:
+        trx_encoder_type: cat
+        agg_type : sum 
+        disc:
+            type: st
+            k_bins: 30
+            task_type: classification
+            fixed_emb: true
+        nemb: true
+    st_num_emb_dist_common_emb_myparams_mean:
+        trx_encoder_type: cat
+        agg_type : mean 
+        disc:
+            type: st
+            k_bins: 30
+            task_type: classification
+            fixed_emb: true
+        nemb: true
+    quant_100_dist_common_emb_myparams_sum:
+        trx_encoder_type: cat
+        agg_type : sum 
+        disc:
+            type: quantile
+            k_bins: 100
+            fixed_emb: false
+        nemb: false
+    quant_100_dist_common_emb_myparams_mean:
+        trx_encoder_type: cat
+        agg_type : mean 
+        disc:
+            type: quantile
+            k_bins: 100
+            fixed_emb: false
+        nemb: false
+    st_num_emb_dist_common_emb_myparams_cat:
+        trx_encoder_type: cat
+        agg_type : cat 
+        disc:
+            type: st
+            k_bins: 20
+            task_type: classification
+            fixed_emb: false
+        nemb: false
+    st_num_emb_dist_common_emb_myparams_mean:
+        trx_encoder_type: cat
+        agg_type : mean 
+        disc:
+            type: st
+            k_bins: 20
+            task_type: classification
+            fixed_emb: false
+        nemb: false
+    st_num_emb_dist_common_emb_myparams_sum:
+        trx_encoder_type: cat
+        agg_type : sum 
+        disc:
+            type: st
+            k_bins: 20
+            task_type: classification
+            fixed_emb: false
+        nemb: false
+    deeptlf9_disc_common_emb_myparams_cat:
+        trx_encoder_type: cat
+        agg_type : cat 
+        disc:
+            type: deeptlf
+            n_est: 9
+            min_freq: 2
+            fixed_emb: false
+        nemb: false
+    deeptlf9_disc_common_emb_myparams_sum:
+        trx_encoder_type: cat
+        agg_type : sum 
+        disc:
+            type: deeptlf
+            n_est: 9
+            min_freq: 2
+            fixed_emb: false
+        nemb: false
+    deeptlf9_disc_common_emb_myparams_mean:
+        trx_encoder_type: cat
+        agg_type : mean 
+        disc:
+            type: deeptlf
+            n_est: 9
+            min_freq: 2
+            fixed_emb: false
+        nemb: false
+
+    
